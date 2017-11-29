@@ -26,7 +26,7 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
+      if(random.nextInt(100) < 25) grid[i][j].obstacle = true;
     }
   }
   
@@ -110,8 +110,8 @@ void draw () {
   }
   
   else {
-    println("no way");
     noLoop();
+    println("no way");
     return;
   }
   

@@ -18,7 +18,7 @@ class Cell {
   
   void Show (color col) {
     noStroke();
-    //strokeWeight(1);
+    strokeWeight(1);
     fill(col);
     //if(obstacle) fill(0);
     
