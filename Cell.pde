@@ -17,12 +17,17 @@ class Cell {
   }
   
   void Show (color col) {
-    stroke(0);
+    noStroke();
     strokeWeight(1);
     fill(col);
-    if(obstacle) fill(0);
+    //if(obstacle) fill(0);
     
-    rect(i * cellWidth, j * cellHeight, cellWidth - 1, cellHeight - 1);
+    if(obstacle) {
+      fill(0);
+      //ellipse(i * cellWidth, j * cellHeight, 10, 10);
+    }
+      
+    rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
   }
   
   void addNeighbours (Cell[][] grid)

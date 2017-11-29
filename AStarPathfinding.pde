@@ -2,8 +2,8 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 90;
-public int cols = 90;
+public int rows = 50;
+public int cols = 50;
 
 public float cellWidth;
 public float cellHeight;
@@ -122,7 +122,7 @@ void draw () {
       grid[i][j].Show(color(255, 255, 255));
     }
   }
-  
+  /*
   for (int i = 0; i < openSet.size(); i++) {
     openSet.get(i).Show(color(0, 255, 0));
   }
@@ -134,9 +134,9 @@ void draw () {
   for (int i = 0; i < path.size(); i++) {
     path.get(i).Show(color(0, 0, 255));
   }
-  
+  */
   noFill();
-  stroke(150, 0, 150);
+  stroke(0, 150, 150);
   strokeWeight(5);
   beginShape();
   for(int i = 0; i < path.size(); i++) {
