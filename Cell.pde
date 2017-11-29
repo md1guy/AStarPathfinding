@@ -17,20 +17,48 @@ class Cell {
   }
   
   void Show (color col) {
-    float cellWidth = height / cols;
-    float cellHeight = width / rows;
+    float cellWidth = height / rows;
+    float cellHeight = width / cols;
     
     fill(col);
-    noStroke();
+    if(obstacle) fill(0);
     
-    rect(i * cellWidth, j * cellHeight, cellWidth - 1, cellHeight - 1);
+    rect(j * cellWidth, i * cellHeight, cellWidth - 1, cellHeight - 1);
   }
   
   void addNeighbours (Cell[][] grid)
   {
-    if(i < cols - 1) neighbours.add(grid[i + 1][j]);
-    if(i > 0) neighbours.add(grid[i - 1][j]);
-    if(j < rows - 1) neighbours.add(grid[i][j + 1]);
-    if(j > 0) neighbours.add(grid[i][j - 1]);
+    if(i < rows - 1) {
+      neighbours.add(grid[i + 1][j]);
+      //neighbours.add(grid[i + 1][j + 1]);
+    }
+    if(i > 0) {
+      neighbours.add(grid[i - 1][j]);
+      //neighbours.add(grid[i - 1][j + 1]);
+    }
+    if(j < cols - 1) {
+      neighbours.add(grid[i][j + 1]);
+      //neighbours.add(grid[i + 1][j - 1]);
+    }
+    if(j > 0) {
+      neighbours.add(grid[i][j - 1]);
+      //neighbours.add(grid[i - 1][j - 1]);
+    }
+    
+    if(i > 0 && j > 0) {
+      neighbours.add(grid[i - 1][j - 1]);
+    }
+    
+    if(i < rows - 1 && j > 0) {
+      neighbours.add(grid[i + 1][j - 1]);
+    }
+    
+    if(i > 0 && j < cols - 1) {
+      neighbours.add(grid[i - 1][j + 1]);
+    }
+    
+    if(i < rows - 1 && j < cols - 1) {
+      neighbours.add(grid[i + 1][j + 1]);
+    }
   }
 }

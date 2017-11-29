@@ -10,7 +10,7 @@ Cell start, end;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
-ArrayList<Cell> path;
+ArrayList<Cell> path  = new ArrayList();
 
 void setup () {
   size(600, 600);
@@ -18,7 +18,7 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      //if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
+      //if(random.nextInt(10) < 3 && grid[i][j] != start && grid[i][j] != end) grid[i][j].obstacle = true;
     }
   }
   
@@ -45,6 +45,13 @@ void draw () {
     Cell current = openSet.get(lowestIndex);
     
     if(current == end) {
+      path = new ArrayList();
+      Cell temp = current;
+      path.add(temp);
+      while(temp.cameFrom != null) {
+        path.add(temp.cameFrom);
+        temp = temp.cameFrom;
+      }
       noLoop();
       println("done");
     }
@@ -57,7 +64,7 @@ void draw () {
     for(int i = 0; i < neighbours.size(); i++) {
       Cell neighbour = neighbours.get(i);
       
-      if(!ExistsInArrayList(closedSet, neighbour)) {
+      if(!ExistsInArrayList(closedSet, neighbour) && !neighbour.obstacle) {
         float tempG = current.g + 1;
         
         if(ExistsInArrayList(openSet, neighbour)) {
@@ -86,8 +93,6 @@ void draw () {
     }
   }
   
-  
-  
   else {
     //no solution
   }
@@ -96,8 +101,7 @@ void draw () {
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      if(grid[i][j].obstacle) grid[i][j].Show(color(0, 0, 0));
-      else grid[i][j].Show(color(255, 255, 255));
+      grid[i][j].Show(color(255, 255, 255));
     }
   }
   
@@ -126,6 +130,7 @@ boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {
 
 
 float Heuristic(Cell a, Cell b) {
-  float distance = dist(a.i, a.j, b.i, b.j);
+  //float distance = dist(a.i, a.j, b.i, b.j);
+  float distance = abs(a.i - b.i) + abs(a.j - b.j); 
   return distance;
 }
