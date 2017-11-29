@@ -67,6 +67,9 @@ void draw () {
           neighbour.g = tempG;
           openSet.add(neighbour);
         }
+        
+        neighbour.h = Heuristic(neighbour, end);
+        neighbour.f = neighbour.g + neighbour.h;
       }
     }
   }
@@ -102,4 +105,10 @@ boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {
     }
   }
   return false;
+}
+
+
+float Heuristic(Cell a, Cell b) {
+  float distance = dist(a.i, a.j, b.i, b.j);
+  return distance;
 }
