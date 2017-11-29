@@ -110,7 +110,7 @@ void draw () {
   }
   
   else {
-    println("no solution");
+    println("no way");
     noLoop();
     return;
   }
@@ -122,6 +122,10 @@ void draw () {
       grid[i][j].Show(color(255, 255, 255));
     }
   }
+  
+  start.Show(color(0, 255, 0));
+  end.Show(color(0, 0, 255));
+  
   /*
   for (int i = 0; i < openSet.size(); i++) {
     openSet.get(i).Show(color(0, 255, 0));
@@ -158,6 +162,7 @@ boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {
 
 float Heuristic(Cell a, Cell b) {
   //float distance = dist(a.i, a.j, b.i, b.j);
-  float distance = abs(a.i - b.i) + abs(a.j - b.j); 
+  //float distance = sqrt(pow((a.i - b.i), 2) + pow((a.j - b.j), 2));
+  float distance = abs(a.i - b.i) + abs(a.j - b.j);
   return distance;
 }
