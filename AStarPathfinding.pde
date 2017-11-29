@@ -5,6 +5,9 @@ final Random random = new Random();
 public int rows = 90;
 public int cols = 90;
 
+public float cellWidth;
+public float cellHeight;
+
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
 
@@ -15,12 +18,15 @@ ArrayList<Cell> path  = new ArrayList();
 void setup () {
   size(900, 900);
   
+  cellWidth = height / rows;
+  cellHeight = width / cols;
+  
   frameRate(10000);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(10) < 2) grid[i][j].obstacle = true;
+      if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
     }
   }
   
@@ -128,6 +134,15 @@ void draw () {
   for (int i = 0; i < path.size(); i++) {
     path.get(i).Show(color(0, 0, 255));
   }
+  
+  noFill();
+  stroke(150, 0, 150);
+  strokeWeight(5);
+  beginShape();
+  for(int i = 0; i < path.size(); i++) {
+    vertex(path.get(i).i * cellWidth + cellWidth / 2, path.get(i).j * cellHeight + cellHeight / 2);
+  }
+  endShape();
   
 }
 
