@@ -7,61 +7,27 @@ Cell start, end;
 
 void setup () {
   size(400, 400);
-  background(51);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      grid[i][j] = new Cell();
+      grid[i][j] = new Cell(i, j);
       //if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
     }
   }
   
   start = grid[0][0];
-  end = grid[rows-1][cols-1];
-  
-  DrawGrid();
+  end = grid[rows - 1][cols - 1];
 }
 
 void draw () {
-
-}
-
-void DrawGrid () {
-  int x = 0;
-  int y = 0;
-  
-  float cellWidth = height / cols;
-  float cellHeight = width / rows;
+  background(255);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      
-      if(grid[i][j] == start) {
-        fill(0, 0, 255);
-        rect(x, y, cellWidth - 1, cellHeight - 1);
-        x += cellWidth; 
-      }
-       
-      else if(grid[i][j] == end) {
-        fill(0, 255, 0);
-        rect(x, y, cellWidth - 1, cellHeight - 1);
-        x += cellWidth; 
-      }
-      
-      else if(grid[i][j].obstacle == true) {
-        fill(0, 0, 0);
-        rect(x, y, cellWidth - 1, cellHeight - 1);
-        x += cellWidth; 
-      }
-      
-      else {
-        noFill();
-        rect(x, y, cellWidth - 1, cellHeight - 1);
-        x += cellWidth;
-      }
+      if(grid[i][j] == start) grid[i][j].Show(color(0, 200, 200));
+      else if(grid[i][j] == end) grid[i][j].Show(color(200, 0, 200));
+      else if(grid[i][j].obstacle) grid[i][j].Show(color(0, 0, 0));
+      else grid[i][j].Show(color(255, 255, 255));
     }
-    
-    x = 0;
-    y += cellHeight;
   }
 }
