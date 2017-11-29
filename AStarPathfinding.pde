@@ -2,19 +2,18 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+public int rows = 25;
+public int cols = 25;
 
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
+ArrayList<Cell> path;
 
 void setup () {
   size(600, 600);
-  
-  frameRate(10000);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
@@ -36,7 +35,7 @@ void setup () {
 }
 
 void draw () {
-  if(openSet.size()>0) {
+  if(openSet.size() > 0) {
     int lowestIndex = 0;
     
     for(int i = 0; i < openSet.size(); i++) {
@@ -45,7 +44,10 @@ void draw () {
     
     Cell current = openSet.get(lowestIndex);
     
-    if(current == end) println("done");
+    if(current == end) {
+      noLoop();
+      println("done");
+    }
     
     closedSet.add(current);
     openSet.remove(lowestIndex);
@@ -63,6 +65,7 @@ void draw () {
             neighbour.g = tempG;
           }
         }
+        
         else {
           neighbour.g = tempG;
           openSet.add(neighbour);
@@ -70,6 +73,15 @@ void draw () {
         
         neighbour.h = Heuristic(neighbour, end);
         neighbour.f = neighbour.g + neighbour.h;
+        neighbour.cameFrom = current;
+        
+        path = new ArrayList();
+        Cell temp = current;
+        path.add(temp);
+        while(temp.cameFrom != null) {
+          path.add(temp.cameFrom);
+          temp = temp.cameFrom;
+        }
       }
     }
   }
@@ -96,6 +108,11 @@ void draw () {
   for (int i = 0; i < closedSet.size(); i++) {
     closedSet.get(i).Show(color(255, 0, 0));
   }
+  
+  for (int i = 0; i < path.size(); i++) {
+    path.get(i).Show(color(0, 0, 255));
+  }
+  
 }
 
 boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {

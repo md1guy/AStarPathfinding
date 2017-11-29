@@ -5,6 +5,8 @@ class Cell {
   int i;
   int j;
   
+  Cell cameFrom = null;
+  
   boolean obstacle = false;
   
   ArrayList<Cell> neighbours = new ArrayList();
@@ -19,6 +21,7 @@ class Cell {
     float cellHeight = width / rows;
     
     fill(col);
+    noStroke();
     
     rect(i * cellWidth, j * cellHeight, cellWidth - 1, cellHeight - 1);
   }
