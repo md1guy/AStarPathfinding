@@ -2,8 +2,8 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+public int rows = 90;
+public int cols = 90;
 
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
@@ -13,12 +13,14 @@ ArrayList<Cell> closedSet = new ArrayList();
 ArrayList<Cell> path  = new ArrayList();
 
 void setup () {
-  size(600, 600);
+  size(900, 900);
+  
+  frameRate(10000);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
+      if(random.nextInt(10) < 2) grid[i][j].obstacle = true;
     }
   }
   
@@ -140,7 +142,7 @@ boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {
 
 
 float Heuristic(Cell a, Cell b) {
-  float distance = dist(a.i, a.j, b.i, b.j);
-  //float distance = abs(a.i - b.i) + abs(a.j - b.j); 
+  //float distance = dist(a.i, a.j, b.i, b.j);
+  float distance = abs(a.i - b.i) + abs(a.j - b.j); 
   return distance;
 }
