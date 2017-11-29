@@ -2,8 +2,8 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 25;
-public int cols = 25;
+public int rows = 50;
+public int cols = 50;
 
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
@@ -70,6 +70,8 @@ void draw () {
       if(!ExistsInArrayList(closedSet, neighbour) && !neighbour.obstacle) {
         float tempG = current.g + 1;
         
+        boolean newPath = false;
+        
         if(ExistsInArrayList(openSet, neighbour)) {
           if(tempG < neighbour.g) {
             neighbour.g = tempG;
@@ -78,12 +80,15 @@ void draw () {
         
         else {
           neighbour.g = tempG;
+          newPath = true;
           openSet.add(neighbour);
         }
         
-        neighbour.h = Heuristic(neighbour, end);
-        neighbour.f = neighbour.g + neighbour.h;
-        neighbour.cameFrom = current;
+        if(newPath) {
+          neighbour.h = Heuristic(neighbour, end);
+          neighbour.f = neighbour.g + neighbour.h;
+          neighbour.cameFrom = current;
+        }
         
         path = new ArrayList();
         Cell temp = current;
@@ -97,7 +102,9 @@ void draw () {
   }
   
   else {
-    //no solution
+    println("no solution");
+    noLoop();
+    return;
   }
   
   background(255);
@@ -133,7 +140,7 @@ boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {
 
 
 float Heuristic(Cell a, Cell b) {
-  //float distance = dist(a.i, a.j, b.i, b.j);
-  float distance = abs(a.i - b.i) + abs(a.j - b.j); 
+  float distance = dist(a.i, a.j, b.i, b.j);
+  //float distance = abs(a.i - b.i) + abs(a.j - b.j); 
   return distance;
 }
