@@ -18,7 +18,7 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      //if(random.nextInt(10) < 3 && grid[i][j] != start && grid[i][j] != end) grid[i][j].obstacle = true;
+      if(random.nextInt(10) < 3) grid[i][j].obstacle = true;
     }
   }
   
@@ -30,6 +30,9 @@ void setup () {
   
   start = grid[0][0];
   end = grid[rows - 1][cols - 1];
+  
+  start.obstacle = false;
+  end.obstacle = false;
   
   openSet.add(start);
 }
