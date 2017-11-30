@@ -2,13 +2,15 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 100;
-public int cols = 100;
+public int rows = 50;
+public int cols = 50;
 
 public float cellWidth;
 public float cellHeight;
 
 public boolean debugMode = false;
+public boolean randomWeights = false;
+public boolean obstacles = true;
 
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
@@ -23,12 +25,12 @@ void setup () {
   cellWidth = height / rows;
   cellHeight = width / cols;
   
-  frameRate(60);
+  frameRate(10000);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(100) < 25) grid[i][j].obstacle = true;
+      if(random.nextInt(100) < 25 && obstacles) grid[i][j].obstacle = true;
     }
   }
   
@@ -96,7 +98,7 @@ void draw () {
         
         if(newPath) {
           neighbour.h = Heuristic(neighbour, end);
-          neighbour.f = neighbour.g + neighbour.h;
+          neighbour.f = neighbour.staticF + neighbour.g + neighbour.h;
           neighbour.cameFrom = current;
         }
         
@@ -121,12 +123,12 @@ void draw () {
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      grid[i][j].Show(color(255, 255, 255));
+      grid[i][j].Show(color(map(grid[i][j].staticF, 1, 100, 255, 75)));
     }
   }
   
-  start.Show(color(0, 255, 0));
-  end.Show(color(0, 0, 255));
+  start.Show(color(0, 200, 0));
+  end.Show(color(100, 0, 255));
   
   if(debugMode) {
     for (int i = 0; i < openSet.size(); i++) {

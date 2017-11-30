@@ -1,4 +1,5 @@
 class Cell {
+  float staticF = random.nextInt(100);
   float f = 0;
   float g = 0;
   float h = 0;
@@ -14,6 +15,7 @@ class Cell {
   Cell (int i, int j) {
     this.i = i;
     this.j = j;
+    if(!randomWeights) this.staticF = 1;
   }
   
   void Show (color col) {
@@ -29,8 +31,12 @@ class Cell {
       fill(0);
       //ellipse(i * cellWidth, j * cellHeight, 10, 10);
     }
-      
+    
     rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+    fill(0);
+    textAlign(BASELINE);
+    textSize(10);
+    if(debugMode) text(int(staticF), i * cellWidth, j * cellHeight + cellHeight); 
   }
   
   void addNeighbours (Cell[][] grid)
