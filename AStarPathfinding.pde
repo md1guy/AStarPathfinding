@@ -10,14 +10,14 @@ public float cellHeight;
 
 public boolean debugMode = false;
 public boolean randomWeights = false;
-public boolean obstacles = true;
-
-Cell[][] grid = new Cell[rows][cols];
-Cell start, end;
+public boolean obstacles = false;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
 ArrayList<Cell> path  = new ArrayList();
+
+Cell[][] grid = new Cell[rows][cols];
+Cell start, end;
 
 void setup () {
   size(900, 900);
@@ -45,6 +45,9 @@ void setup () {
   
   start.obstacle = false;
   end.obstacle = false;
+  
+  start.startF = 0;
+  end.startF = 0;
   
   openSet.add(start);
 }
@@ -98,7 +101,7 @@ void draw () {
         
         if(newPath) {
           neighbour.h = Heuristic(neighbour, end);
-          neighbour.f = neighbour.staticF + neighbour.g + neighbour.h;
+          neighbour.f = neighbour.startF + neighbour.g + neighbour.h;
           neighbour.cameFrom = current;
         }
         
@@ -123,7 +126,7 @@ void draw () {
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      grid[i][j].Show(color(map(grid[i][j].staticF, 1, 100, 255, 75)));
+      grid[i][j].Show(color(map(grid[i][j].startF, 1, 100, 255, 75)));
     }
   }
   

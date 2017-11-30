@@ -1,5 +1,5 @@
 class Cell {
-  float staticF = random.nextInt(99) + 1;
+  float startF = random.nextInt(99) + 1;
   float f = 0;
   float g = 0;
   float h = 0;
@@ -15,7 +15,7 @@ class Cell {
   Cell (int i, int j) {
     this.i = i;
     this.j = j;
-    if(!randomWeights) this.staticF = 1;
+    if(!randomWeights) this.startF = 1;
   }
   
   void Show (color col) {
@@ -36,7 +36,7 @@ class Cell {
     fill(0);
     textAlign(BASELINE);
     textSize(cellWidth / 2);
-    if(debugMode) text(int(staticF), i * cellWidth, j * cellHeight + cellHeight); 
+    if(debugMode) text(int(startF), i * cellWidth, j * cellHeight + cellHeight); 
   }
   
   void addNeighbours (Cell[][] grid)
