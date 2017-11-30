@@ -2,11 +2,13 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+public int rows = 100;
+public int cols = 100;
 
 public float cellWidth;
 public float cellHeight;
+
+public boolean debugMode = false;
 
 Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
@@ -21,7 +23,7 @@ void setup () {
   cellWidth = height / rows;
   cellHeight = width / cols;
   
-  frameRate(10000);
+  frameRate(60);
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
@@ -126,19 +128,20 @@ void draw () {
   start.Show(color(0, 255, 0));
   end.Show(color(0, 0, 255));
   
-  /*
-  for (int i = 0; i < openSet.size(); i++) {
-    openSet.get(i).Show(color(0, 255, 0));
+  if(debugMode) {
+    for (int i = 0; i < openSet.size(); i++) {
+      openSet.get(i).Show(color(0, 255, 0));
+    }
+    
+    for (int i = 0; i < closedSet.size(); i++) {
+      closedSet.get(i).Show(color(255, 0, 0));
+    }
+    
+    for (int i = 0; i < path.size(); i++) {
+      path.get(i).Show(color(0, 0, 255));
+    }
   }
   
-  for (int i = 0; i < closedSet.size(); i++) {
-    closedSet.get(i).Show(color(255, 0, 0));
-  }
-  
-  for (int i = 0; i < path.size(); i++) {
-    path.get(i).Show(color(0, 0, 255));
-  }
-  */
   noFill();
   stroke(0, 150, 150);
   strokeWeight(5);
