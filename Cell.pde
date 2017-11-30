@@ -1,5 +1,5 @@
 class Cell {
-  float staticF = random.nextInt(100);
+  float staticF = random.nextInt(99) + 1;
   float f = 0;
   float g = 0;
   float h = 0;
@@ -35,7 +35,7 @@ class Cell {
     rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
     fill(0);
     textAlign(BASELINE);
-    textSize(10);
+    textSize(cellWidth / 2);
     if(debugMode) text(int(staticF), i * cellWidth, j * cellHeight + cellHeight); 
   }
   
