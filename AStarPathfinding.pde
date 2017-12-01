@@ -2,15 +2,18 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+public int rows = 100;
+public int cols = 100;
 
 public float cellWidth;
 public float cellHeight;
 
+float yoff = 0.0;
+
 public boolean debugMode = false;
 public boolean randomWeights = false;
-public boolean obstacles = false;
+public boolean randomNoiseWeights = true;
+public boolean obstacles = true;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
@@ -30,10 +33,20 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(100) < 25 && obstacles) grid[i][j].obstacle = true;
+      if(random.nextInt(100) < 10 && obstacles) grid[i][j].obstacle = true;
     }
   }
   
+  if(randomNoiseWeights) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        grid[j][i].startF = noise(0, yoff) * 199 + 1;
+        yoff += 0.1;
+      }
+    }
+  }
+      
+      
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j].addNeighbours(grid);
@@ -126,7 +139,7 @@ void draw () {
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      grid[i][j].Show(color(map(grid[i][j].startF, 1, 100, 255, 75)));
+      grid[i][j].Show(color(map(grid[i][j].startF, 1, 200, 255, 25)));
     }
   }
   
@@ -149,7 +162,7 @@ void draw () {
   
   noFill();
   stroke(0, 150, 150);
-  strokeWeight(5);
+  strokeWeight(3);
   beginShape();
   for(int i = 0; i < path.size(); i++) {
     vertex(path.get(i).i * cellWidth + cellWidth / 2, path.get(i).j * cellHeight + cellHeight / 2);
