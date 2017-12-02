@@ -8,12 +8,13 @@ public int cols = 100;
 public float cellWidth;
 public float cellHeight;
 
+float xoff = 0.0;
 float yoff = 0.0;
 
 public boolean debugMode = false;
 public boolean randomWeights = false;
 public boolean randomNoiseWeights = true;
-public boolean obstacles = true;
+public boolean obstacles = false;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
@@ -39,10 +40,12 @@ void setup () {
   
   if(randomNoiseWeights) {
     for(int i = 0; i < rows; i++) {
+      xoff = 0.0;
       for(int j = 0; j < cols; j++) {
-        grid[j][i].startF = noise(0, yoff) * 199 + 1;
-        yoff += 0.1;
+        grid[j][i].startF = noise(xoff, yoff) * 199 + 1;
+        xoff += 1 / cellWidth;
       }
+      yoff += 1 / cellHeight;
     }
   }
       
