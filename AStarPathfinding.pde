@@ -14,7 +14,8 @@ float yoff = 0.0;
 public boolean debugMode = false;
 public boolean randomWeights = false;
 public boolean randomNoiseWeights = true;
-public boolean obstacles = false;
+public boolean randomObstacles = false;
+public boolean randomNoiseObstacles = true;
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
@@ -34,25 +35,25 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(100) < 10 && obstacles) grid[i][j].obstacle = true;
+      if(random.nextInt(100) < 10 && randomObstacles) grid[i][j].obstacle = true;
     }
   }
   
-  if(randomNoiseWeights) {
-    for(int i = 0; i < rows; i++) {
-      xoff = 0.0;
-      for(int j = 0; j < cols; j++) {
-        grid[j][i].startF = noise(xoff, yoff) * 199 + 1;
-        xoff += 1 / cellWidth;
-      }
-      yoff += 1 / cellHeight;
+  for(int i = 0; i < rows; i++) {
+    xoff = 0.0;
+    for(int j = 0; j < cols; j++) {
+      grid[j][i].startF = noise(xoff, yoff) * 254 + 1;
+      xoff += 1 / cellWidth;
     }
+    yoff += 1 / cellHeight;
   }
       
       
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j].addNeighbours(grid);
+      if(grid[i][j].startF > 145 && randomNoiseObstacles) grid[i][j].obstacle = true;
+      if(!randomNoiseWeights) grid[i][j].startF = 1;
     }
   }
   
@@ -98,6 +99,8 @@ void draw () {
     for(int i = 0; i < neighbours.size(); i++) {
       Cell neighbour = neighbours.get(i);
       
+      if(neighbour.obstacle) println("obstacle!");
+      
       if(!ExistsInArrayList(closedSet, neighbour) && !neighbour.obstacle) {
         float tempG = current.g + 1;
         
@@ -142,7 +145,7 @@ void draw () {
   
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
-      grid[i][j].Show(color(map(grid[i][j].startF, 1, 200, 255, 25)));
+      grid[i][j].Show(color(map(grid[i][j].startF, 1, 200, 254, 0)));
     }
   }
   
