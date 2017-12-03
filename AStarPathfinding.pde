@@ -11,15 +11,15 @@ public float cellHeight;
 float xoff = 0.0;
 float yoff = 0.0;
 
-public boolean debugMode = false;              //shows openSet(green), closedSet(red), path(blue), grid and (int)weights
-public boolean randomWeights = false;          //sets random(1-100) weights for each cell. bigger weight - darker cell color, less weight - lighter color
-public boolean randomNoiseWeights = false;     //sets weight based on perlin noise for each cell, so grid now looks cool and foggy
-public boolean randomObstacles = false;        //creates obstacles(denim-blue colored) at random positions
-public boolean randomNoiseObstacles = false;   //creates obstacles at high values of noise
-public boolean showColors = false;             //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
+public boolean debugMode = false; //shows openList(green), closedList(red), path(blue), grid and (int)weights
+public boolean randomWeights = false; //sets random(1-100) weights for each cell. bigger weight - darker cell color, less weight - lighter color
+public boolean randomNoiseWeights = false; //sets weight based on perlin noise for each cell, so grid now looks cool and foggy
+public boolean randomObstacles = false; //creates obstacles(denim-blue colored) at random positions
+public boolean randomNoiseObstacles = false; //creates obstacles at high values of noise  TODO: define and fix a bug with diagonal going through two obstacles in this mode
+public boolean showColors = false; //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
 
-ArrayList<Cell> openSet = new ArrayList();
-ArrayList<Cell> closedSet = new ArrayList();
+ArrayList<Cell> openList = new ArrayList();
+ArrayList<Cell> closedList = new ArrayList();
 ArrayList<Cell> path  = new ArrayList();
 
 Cell[][] grid = new Cell[rows][cols];
@@ -36,7 +36,7 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j] = new Cell(i, j);
-      if(random.nextInt(100) < 10 && randomObstacles) grid[i][j].obstacle = true;
+      if(random.nextInt(100) < 25 && randomObstacles) grid[i][j].obstacle = true;
     }
   }
   
@@ -70,18 +70,18 @@ void setup () {
   start.startF = 0;
   end.startF = 0;
   
-  openSet.add(start);
+  openList.add(start);
 }
 
 void draw () {
-  if(openSet.size() > 0) {
+  if(openList.size() > 0) {
     int lowestIndex = 0;
     
-    for(int i = 0; i < openSet.size(); i++) {
-      if(openSet.get(i).f < openSet.get(lowestIndex).f) lowestIndex = i;
+    for(int i = 0; i < openList.size(); i++) {
+      if(openList.get(i).f < openList.get(lowestIndex).f) lowestIndex = i;
     }
     
-    Cell current = openSet.get(lowestIndex);
+    Cell current = openList.get(lowestIndex);
     
     if(current == end) {
       path = new ArrayList();
@@ -95,8 +95,8 @@ void draw () {
       println("done");
     }
     
-    closedSet.add(current);
-    openSet.remove(lowestIndex);
+    closedList.add(current);
+    openList.remove(lowestIndex);
     
     ArrayList<Cell> neighbours = current.neighbours;
 
@@ -105,12 +105,12 @@ void draw () {
       
       if(neighbour.obstacle) println("obstacle!");
       
-      if(!ExistsInArrayList(closedSet, neighbour) && !neighbour.obstacle) {
+      if(!ExistsInArrayList(closedList, neighbour) && !neighbour.obstacle) {
         float tempG = current.g + 1;
         
         boolean newPath = false;
         
-        if(ExistsInArrayList(openSet, neighbour)) {
+        if(ExistsInArrayList(openList, neighbour)) {
           if(tempG < neighbour.g) {
             neighbour.g = tempG;
           }
@@ -119,7 +119,7 @@ void draw () {
         else {
           neighbour.g = tempG;
           newPath = true;
-          openSet.add(neighbour);
+          openList.add(neighbour);
         }
         
         if(newPath) {
@@ -161,12 +161,12 @@ void draw () {
   end.Show(color(100, 0, 255));
   
   if(debugMode) {
-    for (int i = 0; i < openSet.size(); i++) {
-      openSet.get(i).Show(color(0, 255, 0));
+    for (int i = 0; i < openList.size(); i++) {
+      openList.get(i).Show(color(0, 255, 0));
     }
     
-    for (int i = 0; i < closedSet.size(); i++) {
-      closedSet.get(i).Show(color(255, 0, 0));
+    for (int i = 0; i < closedList.size(); i++) {
+      closedList.get(i).Show(color(255, 0, 0));
     }
     
     for (int i = 0; i < path.size(); i++) {
