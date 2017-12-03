@@ -11,12 +11,12 @@ public float cellHeight;
 float xoff = 0.0;
 float yoff = 0.0;
 
-public boolean debugMode = false;
-public boolean randomWeights = false;
-public boolean randomNoiseWeights = true;
-public boolean randomObstacles = false;
-public boolean randomNoiseObstacles = false;
-public boolean showColors = true;
+public boolean debugMode = false;              //shows openSet(green), closedSet(red), path(blue), grid and (int)weights
+public boolean randomWeights = false;          //sets random(1-100) weights for each cell. bigger weight - darker cell color, less weight - lighter color
+public boolean randomNoiseWeights = false;     //sets weight based on perlin noise for each cell, so grid now looks cool and foggy
+public boolean randomObstacles = false;        //creates obstacles(denim-blue colored) at random positions
+public boolean randomNoiseObstacles = false;   //creates obstacles at high values of noise
+public boolean showColors = false;             //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
 
 ArrayList<Cell> openSet = new ArrayList();
 ArrayList<Cell> closedSet = new ArrayList();
@@ -40,7 +40,7 @@ void setup () {
     }
   }
   
-  if(randomNoiseWeights) {
+  if(randomNoiseWeights || randomNoiseObstacles) {
     for(int i = 0; i < rows; i++) {
       xoff = 0.0;
       for(int j = 0; j < cols; j++) {
@@ -55,7 +55,9 @@ void setup () {
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       grid[i][j].addNeighbours(grid);
-      if(grid[i][j].startF > 145 && randomNoiseObstacles) grid[i][j].obstacle = true;
+      if(grid[i][j].startF > 55 && randomNoiseObstacles) grid[i][j].obstacle = true;
+      if(!randomNoiseWeights && randomWeights) grid[i][j].startF = random.nextInt(99) + 1;
+      if(!randomNoiseWeights && !randomWeights) grid[i][j].startF = 1;
     }
   }
   
@@ -181,6 +183,10 @@ void draw () {
   }
   endShape();
   
+}
+
+void mousePressed() {
+  saveFrame("frame-######.png");
 }
 
 boolean ExistsInArrayList(ArrayList<Cell> list, Cell cell) {

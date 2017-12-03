@@ -1,5 +1,5 @@
 class Cell {
-  float startF = random.nextInt(99) + 1;
+  float startF = 0;
   float f = 0;
   float g = 0;
   float h = 0;
