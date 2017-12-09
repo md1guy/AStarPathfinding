@@ -1,31 +1,32 @@
 class Maze {
-  int height;
-  int width;
+  int h;
+  int w;
   
-  Set<Edge> graph = new <Edge>();
+  Set<Edge> graph = new HashSet<Edge>();
   Node[][] nodes;
   
-  public Boolean[][] convertedGraph; 
+  public Boolean[][] convertedGraph;
   
   
-  Maze(int height, int width)
+  Maze(int h, int w)
   {
-    this.height = height;
-    this.width = width;
+    this.h = h;
+    this.w = w;
 
     CreateNodes();
     AddEdges();
-
+    
     graph = MST(graph);
+
     convertedGraph = ConvertToBoolean(graph);
   }
   
   
   void CreateNodes() {
-    int width = (this.width % 2 == 0) ? this.width + 1 : this.width;
-    int height = (this.height % 2 == 0) ? this.height + 1 : this.height;
-    int nodesI = (height + 1) / 2;
-    int nodesJ = (width + 1) / 2;
+    int w = (this.w % 2 == 0) ? this.w + 1 : this.w;
+    int h = (this.h % 2 == 0) ? this.h + 1 : this.h;
+    int nodesI = (h + 1) / 2;
+    int nodesJ = (w + 1) / 2;
 
     nodes = new Node[nodesI][nodesJ];
 
@@ -35,7 +36,7 @@ class Maze {
         z += 2;
       }
       
-      k += 2;
+      k += 2; 
     }
   }
   
@@ -66,7 +67,7 @@ class Maze {
     
     nodesInMST.add(nodes[random.nextInt(nodes[0].length)][random.nextInt(nodes[1].length)]);
     
-    while (edgesInMST.size() != nodes.length - 1) {
+    while (edgesInMST.size() != nodes[0].length * nodes[1].length - 1) {
       possibleEdges = FindEdges(nodesInMST);
       Set<Edge> possibleEdgesToMST = new HashSet<Edge>();
       
@@ -88,6 +89,12 @@ class Maze {
         nodesInMST.add(edgeToMST.nodeA);
         edgesInMST.add(edgeToMST);
         nodesInMST.add(edgeToMST.nodeB);
+        
+        if(visualizeMazeGenerating) {
+          rect(edgeToMST.nodeA.i * cellWidth, edgeToMST.nodeA.j * cellHeight, cellWidth, cellHeight);
+          rect(edgeToMST.i * cellWidth, edgeToMST.j * cellHeight, cellWidth, cellHeight);
+          rect(edgeToMST.nodeB.i * cellWidth, edgeToMST.nodeB.j * cellHeight, cellWidth, cellHeight);
+        }
       }
     }
     
@@ -120,12 +127,17 @@ class Maze {
   }
   
   Boolean[][] ConvertToBoolean(Set<Edge> edges) {
-    int width = (this.width % 2 == 0) ? this.width + 1 : this.width;
-    int height = (this.height % 2 == 0) ? this.height + 1 : this.height;
-
-    convertedGraph = new Boolean[height][ width];
-    Arrays.fill(convertedGraph, false);
-
+    int h = (this.h % 2 == 0) ? this.h + 1 : this.h;
+    int w = (this.w % 2 == 0) ? this.w + 1 : this.w;
+    
+    int k = 0;
+    
+    convertedGraph = new Boolean[h][w];
+    for (Boolean[] row: convertedGraph) {
+      Arrays.fill(convertedGraph[k], false);
+      k++;
+    }
+    
     for (Edge edge: graph)
     {
       convertedGraph[edge.nodeA.i][edge.nodeA.j] = true;
@@ -145,6 +157,10 @@ class Maze {
     {
       this.i = i;
       this.j = j;
+      
+      if(visualizeMazeGenerating) {
+        rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
+      }
     }
   }
   

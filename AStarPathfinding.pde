@@ -2,8 +2,8 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 100;
-public int cols = 100;
+public int rows = 50;
+public int cols = 50;
 
 public float cellWidth;
 public float cellHeight;
@@ -17,6 +17,9 @@ public boolean randomNoiseWeights = false; //sets weight based on perlin noise f
 public boolean randomObstacles = false; //creates obstacles(denim-blue colored) at random positions
 public boolean randomNoiseObstacles = false; //creates obstacles at high values of noise  TODO: define and fix a bug with diagonal going through two obstacles in this mode
 public boolean showColors = false; //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
+public boolean mazeObstacles = true; //creates random maze of obstacles. WARNING: bigger size causes longer time for maze generating
+public boolean visualizeMazeGenerating = true;
+public boolean diagonalMovement = false;
 
 ArrayList<Cell> openList = new ArrayList();
 ArrayList<Cell> closedList = new ArrayList();
@@ -58,6 +61,18 @@ void setup () {
       if(grid[i][j].startF > 55 && randomNoiseObstacles) grid[i][j].obstacle = true;
       if(!randomNoiseWeights && randomWeights) grid[i][j].startF = random.nextInt(99) + 1;
       if(!randomNoiseWeights && !randomWeights) grid[i][j].startF = 1;
+    }
+  }
+  
+  if(mazeObstacles) {
+    noStroke();
+    fill(255);
+    Maze maze = new Maze(rows, cols);
+  
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        if(!maze.convertedGraph[i][j]) grid[j][i].obstacle = true;
+      }
     }
   }
   
@@ -103,7 +118,7 @@ void draw () {
     for(int i = 0; i < neighbours.size(); i++) {
       Cell neighbour = neighbours.get(i);
       
-      if(neighbour.obstacle) println("obstacle!");
+      //if(neighbour.obstacle) println("obstacle!");
       
       if(!ExistsInArrayList(closedList, neighbour) && !neighbour.obstacle) {
         float tempG = current.g + 1;
