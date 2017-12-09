@@ -40,32 +40,32 @@ class Cell {
 
   void addNeighbours (Cell[][] grid)
   {
-    if (i < rows - 1) {
+    if (i < rows - 2) {
       neighbours.add(grid[i + 1][j]);
     }
-    if (i > 0) {
+    if (i > 1) {
       neighbours.add(grid[i - 1][j]);
     }
-    if (j < cols - 1) {
+    if (j < cols - 2) {
       neighbours.add(grid[i][j + 1]);
     }
-    if (j > 0) {
+    if (j > 1) {
       neighbours.add(grid[i][j - 1]);
     }
 
-    if (i > 0 && j > 0 && !grid[i - 1][j].obstacle && !grid[i][j - 1].obstacle && diagonalMovement) {
+    if (i > 1 && j > 1 && !grid[i - 1][j].obstacle && !grid[i][j - 1].obstacle && diagonalMovement) {
       neighbours.add(grid[i - 1][j - 1]);
     }
 
-    if (i < rows - 1 && j > 0 && !grid[i + 1][j].obstacle && !grid[i][j - 1].obstacle && diagonalMovement) {
+    if (i < rows - 2 && j > 1 && !grid[i + 1][j].obstacle && !grid[i][j - 1].obstacle && diagonalMovement) {
       neighbours.add(grid[i + 1][j - 1]);
     }
 
-    if (i > 0 && j < cols - 1 && !grid[i - 1][j].obstacle && !grid[i][j + 1].obstacle && diagonalMovement) {
+    if (i > 1 && j < cols - 2 && !grid[i - 1][j].obstacle && !grid[i][j + 1].obstacle && diagonalMovement) {
       neighbours.add(grid[i - 1][j + 1]);
     }
 
-    if (i < rows - 1 && j < cols - 1 && !grid[i + 1][j].obstacle && !grid[i][j + 1].obstacle && diagonalMovement) {
+    if (i < rows - 2 && j < cols - 2 && !grid[i + 1][j].obstacle && !grid[i][j + 1].obstacle && diagonalMovement) {
       neighbours.add(grid[i + 1][j + 1]);
     }
   }

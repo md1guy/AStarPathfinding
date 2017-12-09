@@ -2,8 +2,8 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+public int rows = 49;
+public int cols = 49;
 
 public float cellWidth;
 public float cellHeight;
@@ -17,9 +17,8 @@ public boolean randomNoiseWeights = false; //sets weight based on perlin noise f
 public boolean randomObstacles = false; //creates obstacles(denim-blue colored) at random positions
 public boolean randomNoiseObstacles = false; //creates obstacles at high values of noise  TODO: define and fix a bug with diagonal going through two obstacles in this mode
 public boolean showColors = false; //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
-public boolean mazeObstacles = true; //creates random maze of obstacles. WARNING: bigger size causes longer time for maze generating
-public boolean visualizeMazeGenerating = true;
-public boolean diagonalMovement = false;
+public boolean mazeObstacles = true; //creates random maze of obstacles. WARNING: bigger grid size causes longer time for maze generating
+public boolean diagonalMovement = true; //allows diagonal movement (c)your cap
 
 ArrayList<Cell> openList = new ArrayList();
 ArrayList<Cell> closedList = new ArrayList();
@@ -29,10 +28,10 @@ Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
 
 void setup () {
-  size(900, 900);
+  size(900, 900); //hardcode, TODO: find out how to fix it
   
-  cellWidth = height / rows;
-  cellHeight = width / cols;
+  cellWidth = height / (rows + 1);
+  cellHeight = width / (cols + 1);
   
   frameRate(10000);
   
@@ -65,19 +64,17 @@ void setup () {
   }
   
   if(mazeObstacles) {
-    noStroke();
-    fill(255);
     Maze maze = new Maze(rows, cols);
   
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for(int i = 1; i < rows; i++) {
+      for(int j = 1; j < cols; j++) {
         if(!maze.convertedGraph[i][j]) grid[j][i].obstacle = true;
       }
     }
   }
   
-  start = grid[0][0];
-  end = grid[rows - 1][cols - 1];
+  start = grid[1][1];
+  end = grid[rows - 2][cols - 2];
   
   start.obstacle = false;
   end.obstacle = false;
@@ -86,6 +83,14 @@ void setup () {
   end.startF = 0;
   
   openList.add(start);
+  
+  for(int i = 0; i < rows; i++) {
+    grid[i][0].obstacle = true;
+    grid[0][i].obstacle = true;
+    grid[i][cols - 1].obstacle = true;
+    grid[rows - 1][i].obstacle = true;
+  }
+    
 }
 
 void draw () {

@@ -89,12 +89,6 @@ class Maze {
         nodesInMST.add(edgeToMST.nodeA);
         edgesInMST.add(edgeToMST);
         nodesInMST.add(edgeToMST.nodeB);
-        
-        if(visualizeMazeGenerating) {
-          rect(edgeToMST.nodeA.i * cellWidth, edgeToMST.nodeA.j * cellHeight, cellWidth, cellHeight);
-          rect(edgeToMST.i * cellWidth, edgeToMST.j * cellHeight, cellWidth, cellHeight);
-          rect(edgeToMST.nodeB.i * cellWidth, edgeToMST.nodeB.j * cellHeight, cellWidth, cellHeight);
-        }
       }
     }
     
@@ -158,9 +152,7 @@ class Maze {
       this.i = i;
       this.j = j;
       
-      if(visualizeMazeGenerating) {
-        rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
-      }
+      //rect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
     }
   }
   
