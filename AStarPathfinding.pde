@@ -2,24 +2,26 @@ import java.util.*;
 
 final Random random = new Random();
 
-public int rows = 50;
-public int cols = 50;
+Noise noise = new Noise();
+
+public int rows = 71;
+public int cols = 71;
 
 public float cellWidth;
 public float cellHeight;
 
 float xoff = 0.0;
 float yoff = 0.0;
+double seed = random.nextInt(100000);
 
 public boolean debugMode = false; //shows openList(green), closedList(red), path(blue), grid and (int)weights
 public boolean randomWeights = false; //sets random(1-100) weights for each cell. bigger weight - darker cell color, less weight - lighter color
 public boolean randomNoiseWeights = false; //sets weight based on perlin noise for each cell, so grid now looks cool and foggy
 public boolean randomObstacles = false; //creates obstacles(denim-blue colored) at random positions
 public boolean randomNoiseObstacles = false; //creates obstacles at high values of noise  TODO: define and fix a bug with diagonal going through two obstacles in this mode
-public boolean showColors = false; //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
-public boolean mazeObstacles = true; //creates random maze of obstacles. WARNING: bigger size causes longer time for maze generating
-public boolean visualizeMazeGenerating = true;
-public boolean diagonalMovement = false;
+public boolean showColors = true; //if used with randomNoiseWeights, shows terrain-like colors on grid(water and grass). darker water for higher weight and darker grass for lower weight values
+public boolean mazeObstacles = false; //creates random maze of obstacles. WARNING: bigger grid size causes longer time for maze generating
+public boolean diagonalMovement = true; //allows diagonal movement (c)your cap
 
 ArrayList<Cell> openList = new ArrayList();
 ArrayList<Cell> closedList = new ArrayList();
@@ -29,10 +31,15 @@ Cell[][] grid = new Cell[rows][cols];
 Cell start, end;
 
 void setup () {
-  size(900, 900);
+  size(1000, 1000); //hardcode, TODO: find out how to fix it
   
   cellWidth = height / rows;
   cellHeight = width / cols;
+  
+  noise.SetOctaves(5);
+  noise.SetPersistence(0.5);
+  noise.SetFrequency(1);
+  noise.SetLacunarity(2);
   
   frameRate(10000);
   
@@ -47,7 +54,7 @@ void setup () {
     for(int i = 0; i < rows; i++) {
       xoff = 0.0;
       for(int j = 0; j < cols; j++) {
-        grid[j][i].startF = noise(xoff, yoff) * 100;
+        grid[j][i].startF = (float)noise.perlin((double)xoff, (double)yoff, seed) * 100;
         xoff += 0.8 / cellWidth;
       }
       yoff += 0.8 / cellHeight;
@@ -65,19 +72,17 @@ void setup () {
   }
   
   if(mazeObstacles) {
-    noStroke();
-    fill(255);
-    Maze maze = new Maze(rows, cols);
+    Maze maze = new Maze(rows - 2, cols - 2);
   
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        if(!maze.convertedGraph[i][j]) grid[j][i].obstacle = true;
+    for(int i = 0; i < maze.convertedGraph[0].length; i++) {
+      for(int j = 0; j < maze.convertedGraph[1].length; j++) {
+        if(!maze.convertedGraph[i][j]) grid[j + 1][i + 1].obstacle = true;
       }
     }
   }
   
-  start = grid[0][0];
-  end = grid[rows - 1][cols - 1];
+  start = grid[1][1];
+  end = grid[rows - 2][cols - 2];
   
   start.obstacle = false;
   end.obstacle = false;
@@ -86,6 +91,14 @@ void setup () {
   end.startF = 0;
   
   openList.add(start);
+  
+  for(int i = 0; i < rows; i++) {
+    grid[i][0].obstacle = true;
+    grid[0][i].obstacle = true;
+    grid[i][cols - 1].obstacle = true;
+    grid[rows - 1][i].obstacle = true;
+  }
+    
 }
 
 void draw () {
